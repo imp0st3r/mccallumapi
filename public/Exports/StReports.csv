@@ -1,0 +1,2 @@
+_id,creationdate,startdate,enddate,state,taxtype,taxrate,totalsales,taxablesales,tax,__v
+5bfdd90b6dc8992b10362a90,12-23-2018 04:51 PM,09-01-2018,12-26-2018,WA,Sales Tax,0.082,"$2,617.85","$2,617.85",$214.66,0

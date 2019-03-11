@@ -1,0 +1,7 @@
+installs.time,installs.description,installs.hourlycharge,installs.totalcharge,installs.cost,installs.installer,installs._id,installs.invoicenumber,installs.installdate,installs.profit,_id,creationdate,startdate,enddate,employee,totalcost,totalrecieved,totalrate,totalprofit,__v
+1,Deck Install,$50.00,$50.00,$15.00,Ron Fanning,5ba95d233fe45c0d7896718b,18,2018-09-25,$35.00,5bc5c317943ff415301276e2,10-16-2018 12:10 PM,2018-09-01,2018-09-30,Ron Fanning,$175.00,$925.00,$725.00,$750.00,0
+1,Amp Install,$75.00,$75.00,$15.00,Ron Fanning,5ba95d233fe45c0d7896718a,18,2018-09-25,$60.00,,,,,,,,,,
+1,Rear Speaker Install,$150.00,$150.00,$30.00,Ron Fanning,5ba95d233fe45c0d78967189,18,2018-09-25,$120.00,,,,,,,,,,
+1,Subwoofer Install,$200.00,$200.00,$50.00,Ron Fanning,5baad5104d66171ea8de0710,19,2018-09-29,$150.00,,,,,,,,,,
+1,Deck Install,$50.00,$50.00,$15.00,Ron Fanning,5baad7c07fe4cc1aec88f040,19,2018-09-29,$35.00,,,,,,,,,,
+2,Subwoofer Install,$200.00,$400.00,$50.00,Ron Fanning,5bb0387202a2d62f70c7c2f8,20,2018-09-29,$350.00,,,,,,,,,,

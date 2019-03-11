@@ -1,0 +1,4 @@
+items.quantity,items.unitprice,items.totalcharge,items.spiffamount,items.model,items.unitcost,items.brand,items.category,items._id,items.profit,_id,creationdate,startdate,enddate,employee,totalitems,totalitemcost,totalitemprice,percgp,totalprofit,totalspiffs,__v
+1,$649.99,$649.99,$15.00,SR1DK,$450.00,Audison,Amps,5ba027eac9544b46404f54e9,$199.99,5ba02830c9544b46404f5565,09-17-2018 03:22 PM,2018-09-01,2018-09-30,Luke Harris,3,$749.97,"$1,079.96",30.56,$329.99,$0.00,0
+1,$249.99,$249.99,$0.00,50.1D,$199.99,Addictive Audio,Amps,5ba02901c9544b46404f55dd,$50.00,,,,,,,,,,,,
+2,$89.99,$179.98,$0.00,GCX46,$49.99,Addictive Audio,Speakers,5ba02901c9544b46404f55dc,$80.00,,,,,,,,,,,,

@@ -1,0 +1,17 @@
+transactions.brand,transactions.category,transactions.model,transactions.quantity,transactions.spiffamount,transactions.totalcharge,transactions.unitcost,transactions.unitprice,transactions.date,transactions.salesrep,transactions.invoicenumber,transactions.customer,transactions.profit,transactions.percgrossprofit,transactions.totalcost,transactions.totalrecieved,transactions._id,_id,creationdate,startdate,enddate,numberoftransactions,totalitems,totalcost,totalrecieved,totalprofit,percgrossprofit,totalspiffs,__v
+Audison,Amps,SR1DK,1,$15.00,649.99,450,649.99,09-17-2018,Luke Harris,14,Luke Harris,$199.99,30.76816566408714,$450.00,$649.99,5bd4090cc8374f37cc9c3515,5bd4042bdda26930ecdb2c0a,10-26-2018 11:43 PM,09-01-2018,10-24-2018,8,11,"$1,749.91","$2,617.85",$867.94,33.15468800733426,$30.00,0
+Addictive Audio,Amps,50.1D,1,$0.00,249.99,199.99,249.99,09-17-2018,Luke Harris,15,Luke Harris,$50.00,20.00080003200128,$199.99,$249.99,5bd4090cc8374f37cc9c3514,,,,,,,,,,,,
+Addictive Audio,Speakers,GCX46,2,$0.00,179.98,49.99,89.99,09-17-2018,Luke Harris,15,Luke Harris,$80.00,44.449383264807196,$99.98,$179.98,5bd4090cc8374f37cc9c3513,,,,,,,,,,,,
+Audison,Amps,SR1DK,1,$15.00,649.99,450,649.99,10-16-2018,Luke Harris,22,Luke Harris,$199.99,30.76816566408714,$450.00,$649.99,5bd4090cc8374f37cc9c3512,,,,,,,,,,,,
+Addictive Audio,Subwoofers,EXCRUCI8,2,$0.00,299.98,89.99,149.99,10-16-2018,Luke Harris,22,Luke Harris,$120.00,40.0026668444563,$179.98,$299.98,5bd4090cc8374f37cc9c3511,,,,,,,,,,,,
+JVC,CD Players,KD-R330,1,$0.00,89.95,69.99,89.95,10-16-2018,Luke Harris,22,Luke Harris,$19.96,22.190105614230134,$69.99,$89.95,5bd4090cc8374f37cc9c3510,,,,,,,,,,,,
+Addictive Audio,Subwoofers,NFW69,1,$0.00,165.99,99.99,165.99,10-16-2018,Luke Harris,22,Luke Harris,$66.00,39.76143141153082,$99.99,$165.99,5bd4090cc8374f37cc9c350f,,,,,,,,,,,,
+Addictive Audio,Subwoofers,NFW69,2,$0.00,331.98,99.99,165.99,10-24-2018,Luke Harris,23,Luke Harris,$132.00,39.76143141153082,$199.98,$331.98,5bd4090cc8374f37cc9c350e,,,,,,,,,,,,
+Audison,Amps,SR1DK,1,$15.00,649.99,450,649.99,09-17-2018,Luke Harris,14,Luke Harris,$199.99,30.76816566408714,$450.00,$649.99,5bda60c5148bde1340b7c47c,5bda60c5148bde1340b7c47d,10-31-2018 07:11 PM,09-01-2018,10-31-2018,8,11,"$1,749.91","$2,617.85",$867.94,33.15468800733426,$30.00,0
+Addictive Audio,Amps,50.1D,1,$0.00,249.99,199.99,249.99,09-17-2018,Luke Harris,15,Luke Harris,$50.00,20.00080003200128,$199.99,$249.99,5bda60c5148bde1340b7c47b,,,,,,,,,,,,
+Addictive Audio,Speakers,GCX46,2,$0.00,179.98,49.99,89.99,09-17-2018,Luke Harris,15,Luke Harris,$80.00,44.449383264807196,$99.98,$179.98,5bda60c5148bde1340b7c47a,,,,,,,,,,,,
+Audison,Amps,SR1DK,1,$15.00,649.99,450,649.99,10-16-2018,Luke Harris,22,Luke Harris,$199.99,30.76816566408714,$450.00,$649.99,5bda60c5148bde1340b7c479,,,,,,,,,,,,
+Addictive Audio,Subwoofers,EXCRUCI8,2,$0.00,299.98,89.99,149.99,10-16-2018,Luke Harris,22,Luke Harris,$120.00,40.0026668444563,$179.98,$299.98,5bda60c5148bde1340b7c478,,,,,,,,,,,,
+JVC,CD Players,KD-R330,1,$0.00,89.95,69.99,89.95,10-16-2018,Luke Harris,22,Luke Harris,$19.96,22.190105614230134,$69.99,$89.95,5bda60c5148bde1340b7c477,,,,,,,,,,,,
+Addictive Audio,Subwoofers,NFW69,1,$0.00,165.99,99.99,165.99,10-16-2018,Luke Harris,22,Luke Harris,$66.00,39.76143141153082,$99.99,$165.99,5bda60c5148bde1340b7c476,,,,,,,,,,,,
+Addictive Audio,Subwoofers,NFW69,2,$0.00,331.98,99.99,165.99,10-24-2018,Luke Harris,23,Luke Harris,$132.00,39.76143141153082,$199.98,$331.98,5bda60c5148bde1340b7c475,,,,,,,,,,,,

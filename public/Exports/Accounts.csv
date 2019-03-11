@@ -1,0 +1,4 @@
+_id,firstname,lastname,address,city,state,zip,email,phone,taxexempt,__v
+5ab9a06d3eed2f78762344f4,Luke,Harris,P.O. Box 127,Salkum,Washington,98582,lharris.design@gmail.com,(360)304-2394,false,0
+5ab9a55df036f56a4a70a53a,Shawnell,Pilz,2227 Harrison Ave.,Centralia,Washington,98531,shawnellpilz@gmail.com,(360)555-5555,true,0
+5abde5c131c82468b861300a,Lynda,McClutchButt,555 Way Back Lane,BumFuck,Egypt,8765308,lynda.mcclutchbutt@gmail.com,(555)554-5454,false,0

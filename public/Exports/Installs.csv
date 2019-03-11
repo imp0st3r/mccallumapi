@@ -1,0 +1,6 @@
+_id,time,description,hourlycharge,totalcharge,cost,__v
+5ba26cd66fe224173c4e1f58,1,Deck Install,50,50,15,0
+5ba26cf86fe224173c4e1f59,1,Amp Install,75,75,15,0
+5ba26d0c6fe224173c4e1f5a,1,Front Speaker Install,100,100,15,0
+5ba26db3af545a21ccf61058,1,Rear Speaker Install,150,150,30,0
+5ba26dd4af545a21ccf6105a,1,Subwoofer Install,200,200,50,0
