@@ -10,7 +10,6 @@ var sendJsonResponse = function(res, status, content) {
 
 module.exports.sendMessage = function(req, res) {
 	var userEmail = req.body;
-	console.log(userEmail);
 	var headers = {
 		'Content-Type' : 'application/json'
 	};
@@ -25,7 +24,6 @@ module.exports.sendMessage = function(req, res) {
 	};
 	request(options,function(error,response,body){
 		if(!error){
-            console.log(body);
             var recaptchaResponse = JSON.parse(body);
             if(recaptchaResponse.success){
                 var transporter = nodemailer.createTransport({
