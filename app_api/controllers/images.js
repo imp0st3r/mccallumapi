@@ -90,8 +90,8 @@ module.exports.deleteImage = function(req, res) {
 module.exports.uploadImage = function(req,res){
 	var storage = multer.diskStorage({
 		destination: function(request, file, callback){
-			//callback(null, '/var/www/html/assets');
-			callback(null, '../ssac/src/assets/slides');
+			callback(null, '/var/www/html/assets/slides');
+			// callback(null, '../ssac/src/assets/slides');
 		},
 		filename: function(request, file, callback){
 			callback(null, file.originalname)
