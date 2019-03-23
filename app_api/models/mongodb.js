@@ -40,3 +40,4 @@ process.once('SIGUSR2', function () {
 /******************ADD MODELS HERE********************/
 
 require('./reviews');
+require('./image');
