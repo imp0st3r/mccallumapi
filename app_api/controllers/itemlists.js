@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var mysql_config = {
 	host     : 'localhost',
 	port     :  3306,
-	user     : 'root',
+	user     : 'imp0st3r',
 	password : '!Imp0st3r1983',
 	database : 'mccallum',
 };
