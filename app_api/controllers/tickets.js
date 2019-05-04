@@ -1,212 +1,137 @@
-var mysql = require('mysql');
-var mysql_config = {
-	host     : 'localhost',
-	port     :  3306,
-	user     : 'imp0st3r',
-	password : '!Imp0st3r1983',
-	database : 'mccallum',
-};
-var ticket = {}
+var mongoose = require('mongoose').set('debug', true);
+var Ticket = mongoose.model('Ticket');
+var Itemlist = mongoose.model('Itemlist');
+var Hazmat = mongoose.model('Hazmat');
 var moment = require('moment');
 var path = require('path');
 var multer = require('multer');
 var fs = require('fs');
-
-var sendJSONresponse = function(res, status, content) {
+var sendJsonResponse = function(res, status, content) {
 	res.status(status);
 	res.json(content);
 };
 
-module.exports.getTickets = function(req,res){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
+module.exports.getTickets = function(req, res) {
+    Ticket.find().exec(function(err, tickets){
+        if(!tickets){
+            sendJsonResponse(res, 400, { "message" : "no tickets found"});
+            return;
+        } else if (err) {
+            sendJsonResponse(res, 400, err);
+            return;
         }else{
-            console.log("Connected!");
-            var query = "SELECT * FROM tickets";
-            con.query(query, function (err, results) {
-                if (err) {
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    getTicketDetails(res,results,0,function(tickets){
-                        sendJSONresponse(res,200,tickets);
-                    })
-                }
-            });
+            sendJsonResponse(res,200,tickets);
         }
     });
-}
-var getTicketDetails = function(res,results,position,_callback){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "SELECT * FROM itemlists WHERE ticket_id="+results[position].id+";";
-            con.query(query, function (err, itemlists) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    results[position].items = itemlists;
-                    console.log(itemlists);
-                    var query = "SELECT * FROM hazmats WHERE ticket_id='"+results[position].id+"';";
-                    con.query(query, function(err, hazmat){
-                        if(err) {
-                            con.end();
-                            sendJSONresponse(res,400,{"error":err});
-                        }else{
-                            results[position].hazmat = hazmat;
-                            if(position >= results.length -1){
-                                _callback(results);
-                            }else{
-                                getTicketDetails(res,results,position+1,_callback);
-                            }
-                        }
-                    })
-                }
-            });
-        }
-    });
-}
-module.exports.getTicketById = function(req,res){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "SELECT * FROM tickets WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,result[0]);
-                }
-            });
-        }
-    });
-}
-module.exports.createTicket = function(req, res) {
-    console.log(req.body);
-	if(!req.body.creator_id || !req.body.reference_number || !req.body.customer_name || !req.body.job_number || !req.body.supplier_id || !req.body.operator_id) {
-		sendJSONresponse(res, 400, {"message": "All fields required"});
-		return;
-	}else{
-        console.log("creating ticket");
-        var today = moment().format("YYYY-MM-DD HH:mm:ss");
-        console.log(today);
-		ticket = {
-			creator_id : req.body.creator_id,
-            transaction_date : req.body.transaction_date,
-            reference_number : req.body.reference_number,
-            customer_name : req.body.customer_name,
-            job_number : req.body.job_number,
-            supplier_id : req.body.supplier_id,
-            operator_id : req.body.operator_id,
-            status : "open"
-		}
-        console.log(ticket);
-        console.log(ticket.itemlist);
-		var con = mysql.createConnection(mysql_config);
-		con.connect(function(err) {
-			if (err) {
-				sendJSONresponse(res,400,{"error":err});
-				con.end();
-			}else{
-				console.log("Connected!");
-				var query = "INSERT INTO tickets (creator_id,transaction_date,reference_number,customer_name,job_number,supplier_id,operator_id,status) VALUES ('"+ticket.creator_id+"','"+ticket.transaction_date+"','"+ticket.reference_number+"','"+ticket.customer_name+"','"+ticket.job_number+"','"+ticket.supplier_id+"','"+ticket.operator_id+"','"+ticket.status+"');";
-				con.query(query, function (err, result) {
-					if (err) {
-                        con.end();
-                        sendJSONresponse(res,400,{"error":err});
-					}else{
-                        query = "SELECT * FROM tickets WHERE reference_number='"+ticket.reference_number+"'";
-                        con.query(query, function (err, result) {
-                            if (err) {
-                                con.end();
-                                sendJSONresponse(res,400,{"error":err});
-                            }else{
-                                con.end();
-                                sendJSONresponse(res,200,result[0]);
-                                // addItemLists(res,result[0],ticket.itemlist,0,ticket.itemlist.length);
-                            }
-                        });
-					}
-				});
-			}
-		});
+};
+module.exports.getTicketById = function(req, res) {
+	if (req.params.id){
+		Ticket.findById(req.params.id).exec(function(err, ticket){
+            if(!user){
+                sendJsonResponse(res, 400, { "message" : "ticket id not found"});
+                return;
+            } else if (err) {
+                sendJsonResponse(res, 400, err);
+                return;
+            }else{
+                sendJsonResponse(res, 200, ticket);
+            }
+        });
+	} else {
+		sendJsonResponse(res, 400, { "message" : "No ticket id in request."});
 	}
 };
-module.exports.updateTicket =function(req,res){
-    ticket = {
-        id : req.params.id,
-        creator_id : req.body.creator_id,
-        transaction_date : req.body.transaction_date,
-        reference_number : req.body.reference_number,
-        customer_name : req.body.customer_name,
-        job_number : req.body.job_number,
-        supplier_id : req.body.supplier_id,
-        operator_id : req.body.operator_id,
-    }
-    console.log(ticket);
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
+
+module.exports.createTicket = function(req, res) {
+	//console.log(req);
+    var ticket = new Ticket(req.body);
+    ticket.status = "open";
+	//console.log(user);
+	ticket.save(function(err,nticket) {
+		if (err) {
+			sendJsonResponse(res, 400, err);
+		} else {
+			sendJsonResponse(res, 200, nticket);
+		}
+	});
+};
+module.exports.updateTicket = function(req, res) {
+	if(!req.params.id){
+		sendJsonResponse(res, 400, {"message": "Not found, ticket id is required"});
+		return;
+	}
+	Ticket.findById(req.params.id).exec(function(err, ticket) {
+        if(!ticket) {
+            sendJsonResponse(res, 400, {"message" : "ticket not found"});
+            return;
+        } else if (err) {
+            sendJsonResponse(res, 400, err);
+            return;
         }else{
-            console.log("Connected!");
-            var query = "UPDATE tickets SET creator_id='"+ticket.creator_id+"',transaction_date='"+ticket.transaction_date+"',reference_number='"+ticket.reference_number+"',customer_name='"+ticket.customer_name+"',job_number='"+ticket.job_number+"',supplier_id='"+ticket.supplier_id+"',operator_id='"+ticket.operator_id+"' WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
+            ticket.creator_id = req.body.creator_id;
+            if(req.body.worker_id){
+                ticket.worker_id = req.body.worker_id;
+            }
+            if(req.body.transaction_date){
+                ticket.transaction_date = req.body.transaction_date;
+            }
+            if(req.body.reference_number){
+                ticket.reference_number = req.body.reference_number;
+            }
+            if(req.body.customer_name){
+                ticket.customer_name = req.body.customer_name;
+            }
+            if(req.body.job_number){
+                ticket.job_number = req.body.job_number;
+            }
+            if(req.body.supplier_id){
+                ticket.supplier_id = req.body.supplier_id;
+            }
+            if(req.body.operator_id){
+                ticket.operator_id = req.body.operator_id;
+            }
+            if(req.body.items){
+                ticket.items = req.body.items;
+            }
+            if(req.body.hazmat){
+                ticket.hazmat = req.body.hazmat;
+            }
+            if(req.body.status){
+                ticket.status = req.body.status;
+            }else{
+                ticket.status = "open";
+            }
+            ticket.save(function(err, nticket){
                 if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,result);
-                    // updateItemLists(res,result[0],ticket.itemlist,0,ticket.itemlist.length);
+                    sendJsonResponse(res, 400, err);
+                } else {
+                    sendJsonResponse(res, 200, nticket);
                 }
             });
-        }
+        }   
     });
-}
-module.exports.deleteTicket = function(req,res){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "DELETE FROM tickets WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,{"message": "Ticket successfully deleted."});
-                }
-            });
-        }
-    });
-}
+};
+module.exports.deleteTicket = function(req, res) {
+	if (req.params.id) {
+		Ticket.findByIdAndRemove(req.params.id).exec(function(err){
+            if(err){
+                sendJsonResponse(res, 400, err);
+                return;
+            }else{
+                sendJsonResponse(res, 200, "Ticket successfully deleted!");
+            }
+        });
+	} else {
+		sendJsonResponse(res, 400, {"message" : "No ticket id"});
+	}
+};
 module.exports.uploadHazMat = function(req,res){
     var today = new Date().getTime();
 	var storage = multer.diskStorage({
 		destination: function(request, file, callback){
 			// callback(null, '/var/www/html/assets/slides');
-			callback(null, '/var/www/html/assets/hazmats');
-			// callback(null, './public/uploads/hazmats');
+			// callback(null, '/var/www/html/assets/hazmats');
+			callback(null, './public/uploads/hazmats');
 		},
 		filename: function(request, file, callback){
             var originalname = file.originalname.split(".");
@@ -219,83 +144,11 @@ module.exports.uploadHazMat = function(req,res){
 	upload(req,res,function(err){
 		if(err){
 			// //console.log('Error Occured: ' + err);
-			sendJSONresponse(res,400,{"error":err});
+			sendJsonResponse(res,400,{"error":err});
 		}else{
 			// //console.log(req.file);
 			req.file.message = "Your File Has Been Uploaded!";
-			sendJSONresponse(res, 200, req.file);
+			sendJsonResponse(res, 200, req.file);
 		}
 	})
-}
-
-module.exports.acceptTicket = function(req,res){
-    var ticketid = req.params.ticketid;
-    var userid = req.params.userid;
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "UPDATE tickets SET status='in-progress', worker_id='"+userid+"' WHERE id="+ticketid;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,result);
-                }
-            });
-        }
-    });
-}
-
-module.exports.dismissTicket = function(req,res){
-    var ticketid = req.params.ticketid;
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "UPDATE tickets SET status='open', worker_id=null WHERE id="+ticketid;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,result);
-                }
-            });
-        }
-    });
-
-}
-
-module.exports.submitTicket = function(req,res){
-    var ticketid = req.params.ticketid;
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "UPDATE tickets SET status='completed' WHERE id="+ticketid;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,result);
-                }
-            });
-        }
-    });
-
 }

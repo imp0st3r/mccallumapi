@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var cors = require('cors');
 
-// require('./app_api/models/mongodb');
+require('./app_api/models/mongodb');
 require('./app_api/config/passport');
 
 //var routes = require('./app_server/routes/index');

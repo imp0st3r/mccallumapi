@@ -1,240 +1,168 @@
-var mysql = require('mysql');
-var crypto = require('crypto');
-var mysql_config = {
-	host     : 'localhost',
-	port     :  3306,
-	user     : 'imp0st3r',
-	password : '!Imp0st3r1983',
-	database : 'mccallum',
-};
-var user = {}
-
-var sendJSONresponse = function(res, status, content) {
+var mongoose = require('mongoose').set('debug', true);
+var User = mongoose.model('User');
+var sendJsonResponse = function(res, status, content) {
 	res.status(status);
 	res.json(content);
 };
 
-var setPassword = function(password) {
-	console.log(password);
-	user.salt = crypto.randomBytes(16).toString('hex');
-	user.hash = crypto.pbkdf2Sync(password, user.salt, 100000, 64, 'sha512').toString('hex');
+module.exports.getUsers = function(req, res) {
+    User.find().exec(function(err, user){
+        if(!user){
+            sendJsonResponse(res, 400, { "message" : "no users found"});
+            return;
+        } else if (err) {
+            sendJsonResponse(res, 400, err);
+            return;
+        }else{
+            sendJsonResponse(res, 200, user);
+        }
+    });
 };
-
-module.exports.getUsers = function(req,res){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "SELECT * FROM users";
-            con.query(query, function (err, results) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,results);
+module.exports.getUserById = function(req, res) {
+	if (req.params.id){
+		User.findById(req.params.id).exec(function(err, user){
+            if(!user){
+                sendJsonResponse(res, 400, { "message" : "userid not found"});
+                return;
+            } else if (err) {
+                sendJsonResponse(res, 400, err);
+                return;
+            }else{
+                var returnUser = {
+                    id : user._id,
+                    name : user.name,
+                    status : user.status,
+                    role : user.role,
+                    email : user.email
                 }
-            });
-        }
-    });
-}
-module.exports.getUserById = function(req,res){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "SELECT * FROM users WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,result[0]);
-                }
-            });
-        }
-    });
-}
-module.exports.getUserByEmail = function(req,res){
-    console.log(req.params.email);
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err){
-        if(err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected! Getting user by email: " + req.params.email);
-            var query = "SELECT * FROM users WHERE email='"+req.params.email+"'";
-            con.query(query, function(err,result){
-                if(err){
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    console.log(result);
-                    sendJSONresponse(res,200,result[0]);
-                }
-            })
-        }
-    })
-}
-module.exports.createUser = function(req, res) {
-    console.log(req.body);
-	if(!req.body.name || !req.body.email || !req.body.password || !req.body.role) {
-		sendJSONresponse(res, 400, {"message": "All fields required"});
-		return;
-	}else{
-		user = {
-			name : req.body.name,
-			email : req.body.email,
-			hash : "",
-			salt : "",
-			role : req.body.role
-		}
-		setPassword(req.body.password);
-		console.log(user);
-		var con = mysql.createConnection(mysql_config);
-		con.connect(function(err) {
-			if (err) {
-				sendJSONresponse(res,400,{"error":err});
-				con.end();
-			}else{
-				console.log("Connected!");
-				var query = "INSERT INTO users (name,email,hash,salt,role) VALUES ('"+user.name+"','"+user.email+"','"+user.hash+"','"+user.salt+"','"+user.role+"');";
-				con.query(query, function (err, result) {
-					if (err) {
-						sendJSONresponse(res,400,{"error":err});
-						con.end();
-					}else{
-						query = "SELECT * FROM users WHERE email='"+user.email+"';"
-						con.query(query, function(err,result){
-							if(err){
-								sendJSONresponse(res,400,{"error":err});
-							}else{
-								if(result.length > 0){
-									con.end();
-									sendJSONresponse(res,200,result[0]);
-								}else{
-									con.end();
-                                    sendJSONresponse(res,200,{"message":"Email was not found."});
-								}
-							}
-						})
-					}
-				});
-			}
-		});
+                sendJsonResponse(res, 200, returnUser);
+            }
+        });
+	} else {
+		sendJsonResponse(res, 400, { "message" : "No user id in request."});
 	}
 };
-module.exports.resetPassword = function(req,res){
-    user = {
-        name : req.body.name,
-        email : req.body.email,
-        hash : "",
-        salt : "",
-        role : req.body.role
+module.exports.getUserByEmail = function(req,res){
+    if(req.params.email){
+        User.find({email:req.params.email}).exec(function(err,user){
+            if(!user){
+                sendJsonResponse(res,400,{ "message" : "No user found with requested email."});
+            } else if (err){
+                sendJsonResponse(res, 400, err);
+            } else { 
+                sendJsonResponse(res, 200, user);
+            }
+        })
+    } else {
+        sendJsonResponse(res,400, { "message" : "No email in the request."})
     }
-    setPassword(req.body.password);
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "UPDATE users SET hash='"+user.hash+"',salt='"+user.salt+"' WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    query = "SELECT * FROM users WHERE email='"+user.email+"';"
-                    con.query(query, function(err,result){
-                        if(err){
-                            sendJSONresponse(res,400,{"error":err});
-                        }else{
-                            if(result.length > 0){
-                                con.end();
-                                sendJSONresponse(res,200,result[0]);
-                            }else{
-                                con.end();
-                                sendJSONresponse(res,200,{"message":"Email was not found."});
-                            }
-                        }
-                    })
-                }
-            });
-        }
-    });
 }
-module.exports.updateUser =function(req,res){
-    user = {
-        name : req.body.name,
-        email : req.body.email,
-        role : req.body.role
+module.exports.createUser = function(req, res) {
+	//console.log(req);
+	if(!req.body.name || !req.body.password || !req.body.email || !req.body.role) {
+		sendJsonResponse(res, 400, {"message": "All fields required"});
+	return;
+	}
+	var user = new User();
+
+	user.name = req.body.name;
+
+    user.setPassword(req.body.password);
+    user.email = req.body.email;
+    user.role = req.body.role;
+	if(req.body.status){
+		user.status = req.body.status;
+    }else{
+        user.status = "logged-out";
     }
-    console.log(user);
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
+	//console.log(user);
+	user.save(function(err,user) {
+		if (err) {
+			sendJsonResponse(res, 400, err);
+		} else {
+			sendJsonResponse(res, 200, user);
+		}
+	});
+};
+module.exports.updateUser = function(req, res) {
+	if(!req.params.id){
+		sendJsonResponse(res, 400, {"message": "Not found, userid is required"});
+		return;
+	}
+	User.findById(req.params.id).exec(function(err, user) {
+        if(!user) {
+            sendJsonResponse(res, 400, {"message" : "userid not found"});
+            return;
+        } else if (err) {
+            sendJsonResponse(res, 400, err);
+            return;
         }else{
-            console.log("Connected!");
-            var query = "UPDATE users SET name='"+user.name+"',email='"+user.email+"',role='"+user.role+"' WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
+            user.name = req.body.name;
+            user.email = req.body.email;
+            user.role = req.body.role;
+            if(req.body.status){
+                user.status = req.body.status;
+            }
+            user.save(function(err, user){
                 if (err) {
-                    con.end();
-                    if(err.errno === 1062){
-                        sendJSONresponse(res,400,{"message" : "Duplicate user email, please try a different one."})
-                    }else{
-                        sendJSONresponse(res,400,{"error":err});
+                    sendJsonResponse(res, 400, err);
+                } else {
+                    var returnUser = {
+                        id : user._id,
+                        name : user.name,
+                        email : user.email,
+                        role : user.role,
+                        status : user.status
                     }
-                }else{
-                    query = "SELECT * FROM users WHERE email='"+user.email+"';"
-                    con.query(query, function(err,result){
-                        if(err){
-                            sendJSONresponse(res,400,{"error":err});
-                        }else{
-                            if(result.length > 0){
-                                con.end();
-                                sendJSONresponse(res,200,result[0]);
-                            }else{
-                                con.end();
-                                sendJSONresponse(res,200,{"message":"Email was not found."});
-                            }
-                        }
-                    })
+                    sendJsonResponse(res, 200, returnUser);
                 }
             });
-        }
+        }   
     });
-}
-module.exports.deleteUser = function(req,res){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "DELETE FROM users WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,{"message": "User successfully deleted."});
-                }
-            });
-        }
-    });
+};
+module.exports.deleteUser = function(req, res) {
+	if (req.params.id) {
+		User.findByIdAndRemove(req.params.id).exec(function(err, user){
+            if(err){
+                sendJsonResponse(res, 400, err);
+                return;
+            }else{
+                sendJsonResponse(res, 200, "User successfully deleted!");
+            }
+        });
+	} else {
+		sendJsonResponse(res, 400, {"message" : "No userid"});
+	}
+};
+module.exports.resetPassword = function(req, res) {
+    //console.log("CHANGING PASSWORD");
+    console.log(req.body);
+	User.findById(req.body.id).exec(function(err, user){
+			if(!user){
+				sendJsonResponse(res, 400, { "message" : "userid not found"});
+				return;
+			} else if (err) {
+				sendJsonResponse(res, 400, err);
+				return;
+			}
+			console.log(user);
+			var returnUser = user;
+			returnUser.setPassword(req.body.password);
+			//console.log(returnUser);
+			returnUser.save(function(err) {
+				if (err) {
+					sendJsonResponse(res, 400, err);
+				} else {
+					var returnUser2 = {
+						id : returnUser._id,
+                        name : returnUser.name,
+                        email : returnUser.email,
+                        role : returnUser.role,
+						status : returnUser.status
+					}
+					sendJsonResponse(res, 200, returnUser2);
+				}
+			});
+		});
+
 }

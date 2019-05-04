@@ -1,160 +1,93 @@
-var mysql = require('mysql');
-var mysql_config = {
-	host     : 'localhost',
-	port     :  3306,
-	user     : 'imp0st3r',
-	password : '!Imp0st3r1983',
-	database : 'mccallum',
-};
-var hazmat = {}
-
-var sendJSONresponse = function(res, status, content) {
+var mongoose = require('mongoose').set('debug', true);
+var Hazmat = mongoose.model('Hazmat');
+var sendJsonResponse = function(res, status, content) {
 	res.status(status);
 	res.json(content);
 };
 
-module.exports.getHazMats = function(req,res){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
+module.exports.getHazMats = function(req, res) {
+    Hazmat.find().exec(function(err, hazmats){
+        if(!hazmats){
+            sendJsonResponse(res, 400, { "message" : "no hazmats found"});
+            return;
+        } else if (err) {
+            sendJsonResponse(res, 400, err);
+            return;
         }else{
-            console.log("Connected!");
-            var query = "SELECT * FROM hazmats";
-            con.query(query, function (err, results) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,results);
-                }
-            });
+            sendJsonResponse(res, 200, hazmats);
         }
     });
-}
-module.exports.getHazMatById = function(req,res){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "SELECT * FROM hazmats WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,result[0]);
-                }
-            });
-        }
-    });
-}
-module.exports.createHazMat = function(req, res) {
-    console.log(req.body);
-	if(!req.body.ticket_id || !req.body.link) {
-		sendJSONresponse(res, 400, {"message": "All fields required"});
-		return;
-	}else{
-		hazmat = {
-			ticket_id : req.body.ticket_id,
-			link : req.body.link
-		}
-		console.log(hazmat);
-		var con = mysql.createConnection(mysql_config);
-		con.connect(function(err) {
-			if (err) {
-				sendJSONresponse(res,400,{"error":err});
-				con.end();
-			}else{
-				console.log("Connected!");
-				var query = "INSERT INTO hazmats (ticket_id,link) VALUES ('"+hazmat.ticket_id+"','"+hazmat.link+"');";
-				con.query(query, function (err, result) {
-					if (err) {
-                        sendJSONresponse(res,400,{"error":err});
-					}else{
-						query = "SELECT * FROM hazmats WHERE ticket_id='"+hazmat.ticket_id+"';"
-						con.query(query, function(err,result){
-							if(err){
-								sendJSONresponse(res,400,{"error":err});
-							}else{
-								if(result.length > 0){
-									con.end();
-									sendJSONresponse(res,200,result[0]);
-								}else{
-									con.end();
-                                    sendJSONresponse(res,200,{"message":"HazMat was not found."});
-								}
-							}
-						})
-					}
-				});
-			}
-		});
+};
+
+module.exports.getHazMatById = function(req, res) {
+	if (req.params.id){
+		Hazmat.findById(req.params.id).exec(function(err, hazmat){
+            if(!hazmat){
+                sendJsonResponse(res, 400, { "message" : "hazmat id not found"});
+                return;
+            } else if (err) {
+                sendJsonResponse(res, 400, err);
+                return;
+            }else{
+                sendJsonResponse(res, 200, hazmat);
+            }
+        });
+	} else {
+		sendJsonResponse(res, 400, { "message" : "No hazmat id in request."});
 	}
 };
 
-module.exports.updateHazMat =function(req,res){
-    hazmat = {
-        ticket_id : req.body.ticket_id,
-        link : req.body.link
-    }
-    console.log(supplier);
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
+module.exports.createHazMat = function(req, res) {
+	if(!req.body.ticket_id || !req.body.link ) {
+		sendJsonResponse(res, 400, {"message": "All fields required"});
+	return;
+	}
+	var hazmat = new Hazmat(req.body);
+	//console.log(user);
+	hazmat.save(function(err,nhazmat) {
+		if (err) {
+			sendJsonResponse(res, 400, err);
+		} else {
+			sendJsonResponse(res, 200, nhazmat);
+		}
+	});
+};
+module.exports.updateHazMat = function(req, res) {
+	if(!req.params.id){
+		sendJsonResponse(res, 400, {"message": "Not found, hazmat id is required"});
+		return;
+	}
+	Hazmat.findById(req.params.id).exec(function(err, hazmat) {
+        if(!hazmat) {
+            sendJsonResponse(res, 400, {"message" : "hazmat not found"});
+            return;
+        } else if (err) {
+            sendJsonResponse(res, 400, err);
+            return;
         }else{
-            console.log("Connected!");
-            var query = "UPDATE hazmats SET ticket_id='"+hazmat.ticket_id+"',link='"+hazmat.link+"' WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
+            hazmat.ticket_id = req.body.ticket_id;
+            hazmat.link = req.body.link;
+            hazmat.save(function(err, nhazmat){
                 if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    query = "SELECT * FROM hazamats WHERE ticket_id='"+hazmat.ticket_id+"';"
-                    con.query(query, function(err,result){
-                        if(err){
-                            sendJSONresponse(res,400,{"error":err});
-                        }else{
-                            if(result.length > 0){
-                                con.end();
-                                sendJSONresponse(res,200,result[0]);
-                            }else{
-                                con.end();
-                                sendJSONresponse(res,200,{"message":"HazMat was not found."});
-                            }
-                        }
-                    })
+                    sendJsonResponse(res, 400, err);
+                } else {
+                    sendJsonResponse(res, 200, nhazmat);
                 }
             });
-        }
+        }   
     });
-}
-module.exports.deleteHazMat = function(req,res){
-    var con = mysql.createConnection(mysql_config);
-    con.connect(function(err) {
-        if (err) {
-            con.end();
-            sendJSONresponse(res,400,{"error":err});
-        }else{
-            console.log("Connected!");
-            var query = "DELETE FROM hazmats WHERE id="+req.params.id;
-            con.query(query, function (err, result) {
-                if (err) {
-                    con.end();
-                    sendJSONresponse(res,400,{"error":err});
-                }else{
-                    con.end();
-                    sendJSONresponse(res,200,{"message": "HazMat successfully deleted."});
-                }
-            });
-        }
-    });
-}
+};
+module.exports.deleteHazMat = function(req, res) {
+	if (req.params.id) {
+		Hazmat.findByIdAndRemove(req.params.id).exec(function(err){
+            if(err){
+                sendJsonResponse(res, 400, err);
+                return;
+            }else{
+                sendJsonResponse(res, 200, "Hazmat successfully deleted!");
+            }
+        });
+	} else {
+		sendJsonResponse(res, 400, {"message" : "No hazmat id"});
+	}
+};

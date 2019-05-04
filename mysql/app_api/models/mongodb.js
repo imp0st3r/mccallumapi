@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 /****ADD YOUR DB NAME HERE********V*/
-var dbURI = 'mongodb://127.0.0.1/mccallum';
+var dbURI = 'mongodb://127.0.0.1/inventory';
 mongoose.connect(dbURI, { useNewUrlParser: true});
 
 mongoose.connection.on('connected', function() {
@@ -38,11 +38,6 @@ process.once('SIGUSR2', function () {
 
 
 /******************ADD MODELS HERE********************/
-
 require('./users');
 require('./suppliers');
-require('./operators');
-require('./items');
-require('./itemlists');
-require('./hazmats');
-require('./tickets');
+// require('./image');
