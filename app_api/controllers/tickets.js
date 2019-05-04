@@ -130,8 +130,8 @@ module.exports.uploadHazMat = function(req,res){
 	var storage = multer.diskStorage({
 		destination: function(request, file, callback){
 			// callback(null, '/var/www/html/assets/slides');
-			// callback(null, '/var/www/html/assets/hazmats');
-			callback(null, './public/uploads/hazmats');
+			callback(null, '/var/www/html/assets/hazmats');
+			// callback(null, './public/uploads/hazmats');
 		},
 		filename: function(request, file, callback){
             var originalname = file.originalname.split(".");
