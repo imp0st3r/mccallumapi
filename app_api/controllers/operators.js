@@ -38,7 +38,7 @@ module.exports.getOperatorById = function(req, res) {
 };
 
 module.exports.createOperator = function(req, res) {
-	if(!req.body.name || !req.body.lat || !req.body.lng || !req.body.city || !req.body.state || !req.body.atf_license) {
+	if(!req.body.name || !req.body.lat || !req.body.lng || !req.body.city || !req.body.state || !req.body.zip || !req.body.atf_license) {
 		sendJsonResponse(res, 400, {"message": "All fields required"});
 	return;
 	}
@@ -65,12 +65,27 @@ module.exports.updateOperator = function(req, res) {
             sendJsonResponse(res, 400, err);
             return;
         }else{
-            operator.name = req.body.name;
-            operator.lat = req.body.lat;
-            operator.lng = req.body.lng;
-            operator.city = req.body.city;
-            operator.state = req.body.state;
-            operator.atf_license = req.body.atf_license;
+            if(req.body.name){
+                operator.name = req.body.name;
+            }
+            if(req.body.lat){
+                operator.lat = req.body.lat;
+            }
+            if(req.body.lng){
+                operator.lng = req.body.lng;
+            }
+            if(req.body.city){
+                operator.city = req.body.city;
+            }
+            if(req.body.state){
+                operator.state = req.body.state;
+            }
+            if(req.body.zip){
+                operator.zip = req.body.zip;
+            }
+            if(req.body.atf_license){
+                operator.atf_license = req.body.atf_license;
+            }
             operator.save(function(err, operator){
                 if (err) {
                     sendJsonResponse(res, 400, err);
