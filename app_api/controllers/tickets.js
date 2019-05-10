@@ -56,6 +56,7 @@ module.exports.createTicket = function(req, res) {
 	});
 };
 module.exports.updateTicket = function(req, res) {
+	console.log(req.body);
 	if(!req.params.id){
 		sendJsonResponse(res, 400, {"message": "Not found, ticket id is required"});
 		return;
