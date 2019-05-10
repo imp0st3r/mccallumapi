@@ -84,8 +84,17 @@ module.exports.updateItem = function(req, res) {
             if(req.body.ea_weight_per_box){
                 item.ea_weight_per_box = req.body.ea_weight_per_box;
             }
-            if(req.per_box_cs_wt){
+            if(req.body.per_box_cs_wt){
                 item.per_box_cs_wt = req.body.per_box_cs_wt;
+            }
+            if(req.body.hazmat){
+                item.hazmat = req.body.hazmat;
+            }
+            if(req.body.international_id){
+                item.international_id = req.body.international_id;
+            }
+            if(req.body.category){
+                item.category = req.body.category;
             }
             item.save(function(err, nitem){
                 if (err) {
