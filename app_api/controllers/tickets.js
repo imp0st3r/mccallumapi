@@ -46,7 +46,7 @@ module.exports.createTicket = function(req, res) {
 	//console.log(req);
     var ticket = new Ticket(req.body);
     ticket.status = "open";
-	//console.log(user);
+	console.log(ticket);
 	ticket.save(function(err,nticket) {
 		if (err) {
 			sendJsonResponse(res, 400, err);
@@ -56,6 +56,7 @@ module.exports.createTicket = function(req, res) {
 	});
 };
 module.exports.updateTicket = function(req, res) {
+    console.log(req.body);
 	if(!req.params.id){
 		sendJsonResponse(res, 400, {"message": "Not found, ticket id is required"});
 		return;

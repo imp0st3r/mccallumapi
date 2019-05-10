@@ -87,11 +87,6 @@ module.exports.updateItem = function(req, res) {
             if(req.per_box_cs_wt){
                 item.per_box_cs_wt = req.body.per_box_cs_wt;
             }
-            if(req.body.date_code){
-                item.date_code = req.body.date_code;
-            }else{
-                item.date_code = "";
-            }
             item.save(function(err, nitem){
                 if (err) {
                     sendJsonResponse(res, 400, err);

@@ -6,6 +6,7 @@ var operatorSchema = new mongoose.Schema({
 	lng: String,
 	city: String,
 	state: String,
+	zip: String,
 	atf_license: String,
 });
 

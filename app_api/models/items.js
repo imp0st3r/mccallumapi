@@ -9,7 +9,6 @@ var itemSchema = new mongoose.Schema({
 	cs_weight: Number,
 	ea_weight_per_box: Number,
 	per_box_cs_wt: Number,
-	date_code: String,
 });
 
 mongoose.model('Item', itemSchema, 'items');
