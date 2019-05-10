@@ -21,7 +21,11 @@ var ticketSchema = new mongoose.Schema({
     operator_id: String,
 	status : String,
 	items : [itemlistSchema],
-	hazmat : hazmatSchema
+	hazmat : hazmatSchema,
+	trip_route : String,
+	return_route : String,
+	driver : String,
+	truck_number : String
 });
 
 mongoose.model('Ticket', ticketSchema, 'tickets');

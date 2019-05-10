@@ -69,7 +69,9 @@ module.exports.updateTicket = function(req, res) {
             sendJsonResponse(res, 400, err);
             return;
         }else{
-            ticket.creator_id = req.body.creator_id;
+            if(req.body.creator_id){
+                ticket.creator_id = req.body.creator_id;
+            }
             if(req.body.worker_id){
                 ticket.worker_id = req.body.worker_id;
             }
@@ -101,6 +103,18 @@ module.exports.updateTicket = function(req, res) {
                 ticket.status = req.body.status;
             }else{
                 ticket.status = "open";
+            }
+            if(req.body.trip_route){
+                ticket.trip_route = req.body.trip_route;
+            }
+            if(req.body.return_route){
+                ticket.return_route = req.body.return_route;
+            }
+            if(req.body.driver){
+                ticket.driver = req.body.driver;
+            }
+            if(req.body.truck_number){
+                ticket.truck_number = req.body.truck_number;
             }
             ticket.save(function(err, nticket){
                 if (err) {
