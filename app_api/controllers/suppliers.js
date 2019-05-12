@@ -66,12 +66,30 @@ module.exports.updateSupplier = function(req, res) {
             sendJsonResponse(res, 400, err);
             return;
         }else{
-            supplier.name = req.body.name;
-            supplier.address = req.body.address;
-            supplier.city = req.body.city;
-            supplier.state = req.body.state;
-            supplier.zip = req.body.zip;
-            supplier.atf_license = req.body.atf_license;
+            if(req.body.name){
+                supplier.name = req.body.name;
+            }
+            if(req.body.address){
+                supplier.address = req.body.address;
+            }
+            if(req.body.city){
+                supplier.city = req.body.city;
+            }
+            if(req.body.state){
+                supplier.state = req.body.state;
+            }
+            if(req.body.zip){
+                supplier.zip = req.body.zip;
+            }
+            if(req.body.atf_license){
+                supplier.atf_license = req.body.atf_license;
+            }
+            if(req.body.dot_number){
+                supplier.dot_number = req.body.dot_number;
+            }
+            if(req.body.hazmat_reg){
+                supplier.hazmat_reg = req.body.hazmat_reg;
+            }
             supplier.save(function(err, supplier){
                 if (err) {
                     sendJsonResponse(res, 400, err);

@@ -7,6 +7,8 @@ var supplierSchema = new mongoose.Schema({
 	state: String,
 	zip: String,
 	atf_license: String,
+	dot_number: String,
+	hazmat_reg : String
 });
 
 mongoose.model('Supplier', supplierSchema, 'suppliers');
