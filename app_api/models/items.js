@@ -12,6 +12,7 @@ var itemSchema = new mongoose.Schema({
 	hazmat: Boolean,
 	international_id: String,
 	category: String,
+	class: String,
 });
 
 mongoose.model('Item', itemSchema, 'items');

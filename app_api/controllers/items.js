@@ -96,6 +96,9 @@ module.exports.updateItem = function(req, res) {
             if(req.body.category){
                 item.category = req.body.category;
             }
+            if(req.body.class){
+                item.class = req.body.class;
+            }
             item.save(function(err, nitem){
                 if (err) {
                     sendJsonResponse(res, 400, err);
