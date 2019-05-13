@@ -88,7 +88,7 @@ module.exports.updateItem = function(req, res) {
             if(req.body.per_box_cs_wt){
                 item.per_box_cs_wt = req.body.per_box_cs_wt;
             }
-            if(req.body.hazmat){
+            if(req.body.hazmat || !req.body.hazmat){
                 item.hazmat = req.body.hazmat;
             }
             if(req.body.international_id){
