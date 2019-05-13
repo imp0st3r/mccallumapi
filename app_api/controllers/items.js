@@ -100,6 +100,7 @@ module.exports.updateItem = function(req, res) {
             if(req.body.class){
                 item.class = req.body.class;
             }
+            console.log(item);
             item.save(function(err, nitem){
                 if (err) {
                     sendJsonResponse(res, 400, err);
