@@ -13,6 +13,7 @@ var itemSchema = new mongoose.Schema({
 	international_id: String,
 	category: String,
 	class: String,
+	explosive: Boolean
 });
 
 mongoose.model('Item', itemSchema, 'items');

@@ -100,6 +100,9 @@ module.exports.updateItem = function(req, res) {
             if(req.body.class){
                 item.class = req.body.class;
             }
+            if(req.body.explosive || !req.body.explosive){
+                item.explosive = req.body.explosive;
+            }
             console.log(item);
             item.save(function(err, nitem){
                 if (err) {
