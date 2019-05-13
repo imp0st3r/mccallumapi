@@ -65,6 +65,7 @@ module.exports.updateItem = function(req, res) {
             sendJsonResponse(res, 400, err);
             return;
         }else{
+            console.log(req.body);
             item.name = req.body.name;
             if(req.body.size){
                 item.size = req.body.size;
