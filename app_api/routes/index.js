@@ -58,6 +58,7 @@ router.get('/hazmats/:id', ctrlHMs.getHazMatById);
 router.post('/hazmats', ctrlHMs.createHazMat);
 router.put('/hazmats/:id', ctrlHMs.updateHazMat);
 router.delete('/hazmats/:id', ctrlHMs.deleteHazMat);
+router.post('/getHMDoc', ctrlHMs.getHMDoc);
 
 //Tickets
 router.get('/tickets', ctrlTickets.getTickets);

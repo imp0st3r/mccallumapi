@@ -26,6 +26,8 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "pdfkit": "^0.9.1",
+    "pdfmake": "^0.1.56",
     "request": "^2.88.0",
     "serve-favicon": "~2.4.2"
   }

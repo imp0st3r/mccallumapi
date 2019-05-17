@@ -5,7 +5,8 @@ var itemlistSchema = new mongoose.Schema({
 	quantity_received: Number,
 	quantity_used: Number,
 	quantity_returned: Number,
-	date_code: String
+	date_code: String,
+	special_permit: String,
 });
 var hazmatSchema = new mongoose.Schema({
 	link : String

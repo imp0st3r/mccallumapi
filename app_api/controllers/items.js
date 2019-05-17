@@ -70,8 +70,11 @@ module.exports.updateItem = function(req, res) {
             if(req.body.size){
                 item.size = req.body.size;
             }
-            if(req.body.unit){
-                item.unit = req.body.unit;
+            if(req.body.pkg_type){
+                item.pkg_type = req.body.pkg_type;
+            }
+            if(req.body.unit_type){
+                item.unit_type = req.body.unit_type;
             }
             if(req.body.case_size){
                 item.case_size = req.body.case_size;

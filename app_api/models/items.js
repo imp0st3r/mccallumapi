@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var itemSchema = new mongoose.Schema({
 	name: String,
 	size: String,
-	unit: String,
+	unit_type: String,
+	pkg_type: String,
 	case_size: Number,
 	weight_each: Number,
 	cs_weight: Number,
