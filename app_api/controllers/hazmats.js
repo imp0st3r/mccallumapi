@@ -392,7 +392,7 @@ module.exports.getShippingHMDoc = function(req,res){
                     ]
                 },
                 {
-                    text : items[i].item.pkg_type,
+                    text : '\n' + items[i].item.pkg_type,
                     fontSize: 8
                 },
                 {stack: [
@@ -483,7 +483,7 @@ module.exports.getShippingHMDoc = function(req,res){
                     ]
                 },
                 {
-                    text : items[i].item.pkg_type,
+                    text : '\n' + items[i].item.pkg_type,
                     fontSize: 8
                 },
                 {stack: [
