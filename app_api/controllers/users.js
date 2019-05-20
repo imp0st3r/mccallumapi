@@ -14,14 +14,13 @@ module.exports.getUsers = function(req, res) {
             sendJsonResponse(res, 400, err);
             return;
         }else{
-            console.log(user);
             var scrubbedUsers = [];
             for(var i=0;i<user.length;i++){
                 var scrubbedUser = {
-                    name : user.name,
-                    email : user.email,
-                    status : user.status,
-                    role : user.role
+                    name : user[i].name,
+                    email : user[i].email,
+                    status : user[i].status,
+                    role : user[i].role
                 }
                 scrubbedUsers.push(scrubbedUser);
             }
