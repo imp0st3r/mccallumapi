@@ -62,7 +62,7 @@ module.exports.getShippingHMDoc = function(req,res){
     }
     var docDefinition = {
             pageSize: 'LETTER',
-            pageMargins: [40, 80, 40, 160],
+            pageMargins: [40, 80, 40, 180],
             pageOrientation: 'portrait',
             header: {
                 margin: 8,
