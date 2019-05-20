@@ -69,7 +69,7 @@ var operatorSchema = new mongoose.Schema({
 })
 var ticketSchema = new mongoose.Schema({
 	creator: creatorSchema,
-	driver: workerSchema,
+	worker: workerSchema,
 	transaction_date: Date,
 	reference_number: String,
 	customer_name: String,
