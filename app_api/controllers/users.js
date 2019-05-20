@@ -14,7 +14,17 @@ module.exports.getUsers = function(req, res) {
             sendJsonResponse(res, 400, err);
             return;
         }else{
-            sendJsonResponse(res, 200, user);
+            var scrubbedUsers = [];
+            for(var i=0;i<user.length;i++){
+                var scrubbedUser = {
+                    name : user.name,
+                    email : user.email,
+                    status : user.status,
+                    role : user.role
+                }
+                scrubbedUsers.push(scrubbedUser);
+            }
+            sendJsonResponse(res, 200, scrubbedUsers);
         }
     });
 };

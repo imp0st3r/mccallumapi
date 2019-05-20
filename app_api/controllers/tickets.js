@@ -68,11 +68,11 @@ module.exports.updateTicket = function(req, res) {
             sendJsonResponse(res, 400, err);
             return;
         }else{
-            if(req.body.creator_id){
-                ticket.creator_id = req.body.creator_id;
+            if(req.body.creator){
+                ticket.creator = req.body.creator;
             }
-            if(req.body.worker_id){
-                ticket.worker_id = req.body.worker_id;
+            if(req.body.worker){
+                ticket.worker = req.body.worker;
             }
             if(req.body.transaction_date){
                 ticket.transaction_date = req.body.transaction_date;
@@ -86,11 +86,11 @@ module.exports.updateTicket = function(req, res) {
             if(req.body.job_number){
                 ticket.job_number = req.body.job_number;
             }
-            if(req.body.supplier_id){
-                ticket.supplier_id = req.body.supplier_id;
+            if(req.body.supplier){
+                ticket.supplier = req.body.supplier;
             }
-            if(req.body.operator_id){
-                ticket.operator_id = req.body.operator_id;
+            if(req.body.operator){
+                ticket.operator = req.body.operator;
             }
             if(req.body.items){
                 ticket.items = req.body.items;
@@ -114,6 +114,22 @@ module.exports.updateTicket = function(req, res) {
             }
             if(req.body.truck_number){
                 ticket.truck_number = req.body.truck_number;
+            }
+            if(req.body.hazmat_shipping_confirmation){
+                ticket.hazmat_shipping_confirmation = req.body.hazmat_shipping_confirmation;
+            }else{
+                ticket.hazmat_shipping_confirmation = false;
+            }
+            if(req.body.hazmat_return_confirmation){
+                ticket.hazmat_return_confirmation = req.body.hazmat_return_confirmation;
+            }else{
+                ticket.hazmat_return_confirmation = false;
+            }
+            if(req.body.hazmat_return_paper){
+                ticket.hazmat_return_paper = req.body.hazmat_return_paper;
+            }
+            if(req.body.hazmat_shipping_paper){
+                ticket.hazmat_shipping_paper = req.body.hazmat_shipping_paper;
             }
             ticket.save(function(err, nticket){
                 if (err) {

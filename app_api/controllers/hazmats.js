@@ -17,30 +17,8 @@ var sendJsonResponse = function(res, status, content) {
 	res.status(status);
 	res.json(content);
 };
-function createPdfBinary(pdfDoc, callback) {
-console.log(pdfDoc);
 
-// var chunks = [];
-// var result;
-
-// doc.on('data', function (chunk) {
-//     console.log(chunk);
-//     chunks.push(chunk);
-// });
-// doc.on('end', function () {
-//     result = Buffer.concat(chunks);
-//     callback('data:application/pdf;base64,' + result.toString('base64'));
-// });
-// doc.end();
-
-}
-
-module.exports.getHMDoc = function(req,res){
-    // var doc = new PDFDocument;
-    // doc.pipe(fs.createWriteStream('public/hazmats/test.pdf'));
-    // doc.pipe(res);
-    // doc.text('test');
-    // doc.end();
+module.exports.getShippingHMDoc = function(req,res){
     console.log(req.body);
     var supplier = {};
     var operator = {};
@@ -82,19 +60,15 @@ module.exports.getHMDoc = function(req,res){
     if(supplier.atf_license){
         atfLicense = supplier.atf_license;
     }
-    console.log("Supplier: ", supplier);
-    console.log("Operator: ", operator);
-    console.log("Trip Route: ", tripRoute);
-    console.log("Items: ", items); 
     var docDefinition = {
-            pageSize: 'LEGAL',
-            pageMargins: [40, 80, 40, 60],
+            pageSize: 'LETTER',
+            pageMargins: [40, 80, 40, 160],
             pageOrientation: 'portrait',
             header: {
                 margin: 8,
                 columns: [
                     {
-                        text: new moment(req.body.transactionDate).format("MM-DD-YYYY"),
+                        text: new moment(req.body.transaction_date).format("MM-DD-YYYY"),
                         alignment: 'center'
                     },
                     {
@@ -107,6 +81,43 @@ module.exports.getHMDoc = function(req,res){
                         alignment : 'center'
                     }
                 ] 
+            },
+            footer: function(currentPage, pageCount) {
+                return {
+                    
+                    stack: [
+                        'This is to certify that the above named materials are properly classified, described, packaged, marked and labeled, and are in proper condition for transportation according to the applicable regulations of the Department Of Transportation.\n',
+                        '\n',
+                        {
+                            image:'public/images/sig.png',
+                            width:100,
+                        },
+                        '\n',
+                        {
+                            table: {
+                                widths: [200,100,200],
+                                body: [
+                                    [
+                                        {
+                                            text: new moment(req.body.transaction_date).format("dddd") + ", " + new moment(req.body.transaction_date).format("LL"),
+                                            alignment: 'left'
+                                        },
+                                        {
+                                            text : req.body.reference_number,
+                                            alignment : 'center',
+                                        },
+                                        {
+                                            text : 'Page ' + currentPage.toString() + ' of ' + pageCount,
+                                            alignment : 'right'
+                                        }
+                                    ]
+                                ]
+                            },
+                            layout: 'noBorders'
+                        }
+                    ],
+                    margin: [40,40] 
+                }
             },
             content: [
                 {
@@ -504,7 +515,8 @@ module.exports.getHMDoc = function(req,res){
                     text:''
                 },
                 {
-                    text:''
+                    text:items[i].special_permit,
+                    fontSize: 8
                 }
            ];
             docDefinition.content[8].table.body.push(newItem);
@@ -512,363 +524,16 @@ module.exports.getHMDoc = function(req,res){
     }
     console.log(docDefinition);
     var pdfDoc = printer.createPdfKitDocument(docDefinition);
-    pdfDoc.pipe(fs.createWriteStream('public/hazmats/test.pdf'));
+    var today = new Date().getTime();
+    var firstName = "/var/www/html/";
+    var lastName = "assets/hazmats/HM_SP_"+req.body.customer_name+"_"+today+".pdf";
+    var docName = firstName + lastName;
+    writeStream = fs.createWriteStream(docName);
+    pdfDoc.pipe(writeStream);
     pdfDoc.end();
-    // console.log("DOC DEF: ",docDefinition);
-    // var pdf = printer.createPdfKitDocument(docDefinition);
-    // pdf.pipe(fs.createWriteStream('test.pdf'));
-    // pdf.pipe(res);
-    // pdf.end();
-    // var dd = {
-    //     header: {
-    //         columns: [
-    //             {
-    //                 text: new moment(req.body.transactionDate).format("MM-DD-YYYY"),
-    //                 alignment: 'left'
-    //             },
-    //             {
-    //                 text : 'Hazardous Materials Shipping Paper',
-    //                 alignment : 'center',
-    //                 fontSize : 15
-    //             },
-    //             {
-    //                 text : req.body.customer_name,
-    //                 alignment : 'right'
-    //             }
-    //         ] 
-    //     },
-    //     content: [
-    //         {
-    //             columns: [
-    //                 {
-    //                     text : '\nSupplier:\n'+supplier.name+'\n'+supplier.address+'\n'+supplier.city+' '+supplier.state+','+supplier.zip
-    //                 },
-    //                 {
-    //                     text : '\nShip To:\n'+operator.name+'\n'+operator.lat+'\n'+operator.lng+'\n'+operator.city+' '+operator.state+','+operator.zip
-    //                 },
-    //                 {
-    //                     text : '\n\nIn Case of Emergency Contact:\nCHEMTEL: 800-255-3924\nCustomer #MIS9848041',
-    //                     bold : true
-    //                 } 
-    //             ]
-    //         },
-    //         {
-    //             columns: [
-    //                 {
-    //                     text : '\nDriver:'
-    //                 },
-    //                 {
-    //                     text : ''
-    //                 },
-    //                 {
-    //                     text : '\nTruck #:'
-    //                 },
-    //                 {
-    //                     text : ''
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             text: '\nTrip Route: S to NE Ouaale W to Clark S to US-97 SE to US-26 NW to 9th NE to Main NE to 7 NE to Stearn E to US-26 W to Ochoco Crk E to Petersn Crk Paulina Highway',
-    //         },
-    //         {
-    //             text: '\nReturn Route: '
-    //         },
-    //         {
-    //             columns: [
-    //                 {
-    //                     text : '\nU.S. DOT# 2901440',
-    //                     fontSize: 10
-    //                 },
-    //                 {
-    //                     text : '\nHAZMAT REG. 081016 550 008Y A',
-    //                     fontSize: 10
-    //                 },
-    //                 {
-    //                     text : '\nATF License# 9-WA-041-20-9K-0',
-    //                     fontSize: 10
-    //                 } 
-    //             ],
-    //         },
-    //         {
-    //             text : '\n',
-    //         },
-    //         {
-    //             table: {
-    //                 headerRows:1,
-    //                 widths: [20,160,25,120,120],
-    //                 body: [
-    //                     [
-    //                         'HM',
-    //                         {
-    //                             text: 'Shipping Description',
-    //                             alignment: 'center'
-    //                         },
-    //                         {text : [{
-    //                             text : 'Pkg Type',
-    //                             fontSize : 8}]
-    //                         },
-    //                         {stack: [
-    //                                 'Shipped',
-    //                                 {
-    //                                     table: {
-    //                                         widths: [40,40,40],
-    //                                         body: [
-    //                                             [{
-    //                                                 text:'No Pkgs',
-    //                                                 fontSize: 8
-    //                                              },{
-    //                                                 text:'Units',
-    //                                                 fontSize: 8
-    //                                              }, '']
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 }
-    //                             ]
-    //                         },
-    //                         {stack: [
-    //                                 'Returned',
-    //                                 {
-    //                                     table: {
-    //                                         widths: [40,40,40],
-    //                                         body: [
-    //                                             [{
-    //                                                 text:'No Pkgs',
-    //                                                 fontSize: 8
-    //                                              },{
-    //                                                 text:'Units',
-    //                                                 fontSize: 8
-    //                                              }, '']
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 }
-    //                             ]
-    //                         },
-    //                     ],
-    //                     [
-    //                         'X',
-    //                         {stack: [
-    //                                 {
-    //                                     table: {
-    //                                         body: [
-    //                                             [
-    //                                                 {
-    //                                                     text:'UN2790',
-    //                                                     fontSize: 8
-    //                                                 }, 
-    //                                                 {
-    //                                                     text:'Acedic Acid Solution',
-    //                                                     fontSize: 8
-    //                                                 },
-    //                                                 {
-    //                                                     text: '8 PGII',
-    //                                                     fontSize: 8
-    //                                                 }
-    //                                             ]
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 },
-    //                                 {
-    //                                     table: {
-    //                                         body: [
-    //                                             [
-    //                                                 {
-    //                                                     text:'Acetic Acid 50-56%',
-    //                                                     fontSize: 8,
-    //                                                     bold: true,
-    //                                                     alignment:'center'
-    //                                                 }
-    //                                             ]
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 }
-    //                             ]
-    //                         },
-    //                         {
-    //                             text : 'Tank',
-    //                             fontSize: 10
-    //                         },
-    //                         {stack: [
-    //                                 {
-    //                                     table: {
-    //                                         widths: [40,40,40],
-    //                                         body: [
-    //                                             [
-    //                                                 {
-    //                                                     text:1,
-    //                                                     fontSize: 10
-    //                                                 }, 
-    //                                                 {
-    //                                                     text:80,
-    //                                                     fontSize: 10
-    //                                                 },
-    //                                                 {
-    //                                                     text: 'GAL',
-    //                                                     fontSize: 10
-    //                                                 }
-    //                                             ]
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 }
-    //                             ]
-    //                         },
-    //                         ''
-    //                    ],
-    //                ]
-    //             }
-    //         },
-    //         {
-    //             text : '\n',
-    //         },
-    //         {
-    //             table: {
-    //                 headerRows:1,
-    //                 widths: [20,160,25,120,120],
-    //                 body: [
-    //                     [
-    //                         'HM',
-    //                         {
-    //                             text: 'Shipping Description Explosive Materials',
-    //                             alignment: 'center'
-    //                         },
-    //                         {text : [{
-    //                             text : 'Pkg Type',
-    //                             fontSize : 8}]
-    //                         },
-    //                         {stack: [
-    //                                 'Shipped',
-    //                                 {
-    //                                     table: {
-    //                                         widths: [40,40,40],
-    //                                         body: [
-    //                                             [{
-    //                                                 text:'No Pkgs',
-    //                                                 fontSize: 8
-    //                                              },{
-    //                                                 text:'Units',
-    //                                                 fontSize: 8
-    //                                              }, '']
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 }
-    //                             ]
-    //                         },
-    //                         {stack: [
-    //                                 'Returned',
-    //                                 {
-    //                                     table: {
-    //                                         widths: [40,40,40],
-    //                                         body: [
-    //                                             [{
-    //                                                 text:'No Pkgs',
-    //                                                 fontSize: 8
-    //                                              },{
-    //                                                 text:'Units',
-    //                                                 fontSize: 8
-    //                                              }, '']
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 }
-    //                             ]
-    //                         },
-    //                     ],
-    //                     [
-    //                         'X',
-    //                         {stack: [
-    //                                 {
-    //                                     table: {
-    //                                         body: [
-    //                                             [
-    //                                                 {
-    //                                                     text:'UN2790',
-    //                                                     fontSize: 8
-    //                                                 }, 
-    //                                                 {
-    //                                                     text:'Acedic Acid Solution',
-    //                                                     fontSize: 8
-    //                                                 },
-    //                                                 {
-    //                                                     text: '8 PGII',
-    //                                                     fontSize: 8
-    //                                                 }
-    //                                             ]
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 },
-    //                                 {
-    //                                     table: {
-    //                                         body: [
-    //                                             [
-    //                                                 {
-    //                                                     text:'14DE17El',
-    //                                                     fontSize: 8,
-    //                                                 }, 
-    //                                                 {
-    //                                                     text:'Orange Cap DC',
-    //                                                     fontSize: 8,
-    //                                                 },
-    //                                                 {
-    //                                                     text: '1',
-    //                                                     fontSize: 8,
-    //                                                 }
-    //                                             ]
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 }
-    //                             ]
-    //                         },
-    //                         {
-    //                             text : 'Tank',
-    //                             fontSize: 10
-    //                         },
-    //                         {stack: [
-    //                                 {
-    //                                     table: {
-    //                                         widths: [40,40,40],
-    //                                         body: [
-    //                                             [
-    //                                                 {
-    //                                                     text:1,
-    //                                                     fontSize: 10
-    //                                                 }, 
-    //                                                 {
-    //                                                     text:80,
-    //                                                     fontSize: 10
-    //                                                 },
-    //                                                 {
-    //                                                     text: 'GAL',
-    //                                                     fontSize: 10
-    //                                                 }
-    //                                             ]
-    //                                         ]
-    //                                     },
-    //                                     layout: 'noBorders'
-    //                                 }
-    //                             ]
-    //                         },
-    //                         ''
-    //                    ],
-    //                ]
-    //             }
-    //         }
-    //     ]
-        
-    //}
-    // createPdfBinary(dd, function(binary) {
-    //     res.contentType('application/pdf');
-    //     sendJsonResponse(res,200,binary);
-    // }, function(error) {
-    //     sendJsonResponse(res,400,error);
-    // });
+    writeStream.on('finish',function(){
+        sendJsonResponse(res,200,JSON.parse(JSON.stringify({"hazmatLink" : lastName})));
+    })
 }
 
 module.exports.getHazMats = function(req, res) {
