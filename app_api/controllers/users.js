@@ -14,6 +14,7 @@ module.exports.getUsers = function(req, res) {
             sendJsonResponse(res, 400, err);
             return;
         }else{
+            console.log(user);
             var scrubbedUsers = [];
             for(var i=0;i<user.length;i++){
                 var scrubbedUser = {
