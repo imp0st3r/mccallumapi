@@ -17,6 +17,7 @@ module.exports.getUsers = function(req, res) {
             var scrubbedUsers = [];
             for(var i=0;i<user.length;i++){
                 var scrubbedUser = {
+                    _id : user[i]._id,
                     name : user[i].name,
                     email : user[i].email,
                     status : user[i].status,
@@ -39,7 +40,7 @@ module.exports.getUserById = function(req, res) {
                 return;
             }else{
                 var returnUser = {
-                    id : user._id,
+                    _id : user._id,
                     name : user.name,
                     status : user.status,
                     role : user.role,
@@ -118,7 +119,7 @@ module.exports.updateUser = function(req, res) {
                     sendJsonResponse(res, 400, err);
                 } else {
                     var returnUser = {
-                        id : user._id,
+                        _id : user._id,
                         name : user.name,
                         email : user.email,
                         role : user.role,
@@ -164,7 +165,7 @@ module.exports.resetPassword = function(req, res) {
 					sendJsonResponse(res, 400, err);
 				} else {
 					var returnUser2 = {
-						id : returnUser._id,
+						_id : returnUser._id,
                         name : returnUser.name,
                         email : returnUser.email,
                         role : returnUser.role,
