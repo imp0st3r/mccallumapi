@@ -116,7 +116,7 @@ module.exports.getShippingHMDoc = function(req,res){
                             layout: 'noBorders'
                         }
                     ],
-                    margin: [40,40] 
+                    margin: [40,60] 
                 }
             },
             content: [
