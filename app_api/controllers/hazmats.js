@@ -47,8 +47,8 @@ module.exports.getReturnHMDoc = function(req,res){
     if(req.body.driver){
         driver = req.body.driver;
     }
-    if(req.body.truckNumber){
-        truckNumber = req.body.truckNumber;
+    if(req.body.truck_number){
+        truckNumber = req.body.truck_number;
     }
     if(supplier.dot_number){
         dotNumber = supplier.dot_number;
@@ -139,13 +139,13 @@ module.exports.getReturnHMDoc = function(req,res){
                             text : '\nDriver:'
                         },
                         {
-                            text : driver
+                            text :'\n'+ driver
                         },
                         {
                             text : '\nTruck #:'
                         },
                         {
-                            text : truckNumber
+                            text :'\n'+ truckNumber
                         }
                     ]
                 },
