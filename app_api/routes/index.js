@@ -59,6 +59,7 @@ router.post('/hazmats', ctrlHMs.createHazMat);
 router.put('/hazmats/:id', ctrlHMs.updateHazMat);
 router.delete('/hazmats/:id', ctrlHMs.deleteHazMat);
 router.post('/getShippingHMDoc', ctrlHMs.getShippingHMDoc);
+router.post('/getReturnHMDoc', ctrlHMs.getReturnHMDoc);
 
 //Tickets
 router.get('/tickets', ctrlTickets.getTickets);
