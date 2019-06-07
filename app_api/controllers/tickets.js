@@ -24,6 +24,18 @@ module.exports.getTickets = function(req, res) {
         }
     });
 };
+
+module.exports.getOpenTickets = function(req,res) {
+    Tickets.find({status:"open"},function(err,tickets){
+        if(!tickets){
+            sendJsonResponse(res,400,{"message": "no tickets found"})
+        }else if (err){
+            sendJsonResponse(res, 400, err);
+        }else{
+            sendJsonResponse(res,200,tickets);
+        }
+    })
+}
 module.exports.getTicketById = function(req, res) {
 	if (req.params.id){
 		Ticket.findById(req.params.id).exec(function(err, ticket){
