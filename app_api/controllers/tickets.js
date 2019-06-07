@@ -26,7 +26,7 @@ module.exports.getTickets = function(req, res) {
 };
 
 module.exports.getOpenTickets = function(req,res) {
-    Tickets.find({status:"open"},function(err,tickets){
+    Tickets.find({"status":"open"}).exec(function(err,tickets){
         if(!tickets){
             sendJsonResponse(res,400,{"message": "no tickets found"})
         }else if (err){
