@@ -38,7 +38,16 @@ module.exports.getOpenTickets = function(req,res) {
         }
     })
 }
-
+module.exports.getInProgressTickets = function(req,res){
+    var userid = req.params.userid;
+    Ticket.find({"worker":{_id:userid}},function(err,tickets){
+        if(err){
+            sendJsonResponse(res,400,err);
+        }else{
+            sendJsonResponse(res,200,tickets);
+        }
+    })
+}
 module.exports.getTicketById = function(req, res) {
 	if (req.params.id){
 		Ticket.findById(req.params.id).exec(function(err, ticket){

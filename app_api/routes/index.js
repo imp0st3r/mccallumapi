@@ -69,6 +69,7 @@ router.put('/tickets/:id',ctrlTickets.updateTicket);
 router.delete('/tickets/:id',ctrlTickets.deleteTicket);
 router.post('/uploadhazmat',ctrlTickets.uploadHazMat);
 router.get('/getopentickets', ctrlTickets.getOpenTickets);
+router.get('/getinprogresstickets/:userid', ctrlTickets.getInProgressTickets);
 router.get('/acceptticket/:ticketid/:userid',ctrlTickets.acceptTicket);
 // router.post('/dismissticket/:ticketid',ctrlTickets.dismissTicket);
 // router.post('/submitticket/:ticketid',ctrlTickets.submitTicket);
