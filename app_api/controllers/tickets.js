@@ -215,6 +215,7 @@ module.exports.acceptTicket = function(req,res){
                     nticket.status = "in-progress";
                     nticket.save(function(err,rticket){
                         if(err){
+                            console.log(err);
                             sendJsonResponse(res,400,err);
                         }else{
                             sendJsonResponse(res,200,rticket);
