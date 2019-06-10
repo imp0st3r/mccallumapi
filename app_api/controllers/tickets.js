@@ -205,17 +205,17 @@ module.exports.acceptTicket = function(req,res){
             sendJsonResponse(res,400,err);
         }else{
             var worker = doc;
-            Ticket.find({_id:ticketid},function(err,doc){
+            Ticket.find({_id:ticketid},function(err,nticket){
                 if(err){
                     sendJsonResponse(res,400,err);
                 }else{
-                    var currentTicket = doc;
-                    currentTicket.worker = worker;
-                    currentTicket.save(function(err,doc){
+                    nticket.worker = worker;
+                    nticket.status = "in-progress";
+                    nticket.save(function(err,rticket){
                         if(err){
                             sendJsonResponse(res,400,err);
                         }else{
-                            sendJsonResponse(res,200,doc);
+                            sendJsonResponse(res,200,rticket);
                         }
                     }) 
                 }
