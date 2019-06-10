@@ -205,8 +205,10 @@ module.exports.acceptTicket = function(req,res){
             sendJsonResponse(res,400,err);
         }else{
             var worker = doc;
+            console.log(ticketid);
             Ticket.findById(ticketid).exec(function(err,nticket){
                 if(err){
+                    console.log(err);
                     sendJsonResponse(res,400,err);
                 }else{
                     nticket.worker = worker;
