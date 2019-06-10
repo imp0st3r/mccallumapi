@@ -1,6 +1,6 @@
 var mongoose = require('mongoose').set('debug', true);
 var Ticket = mongoose.model('Ticket');
-var User = mongoose.modal('User');
+var User = mongoose.model('User');
 var Itemlist = mongoose.model('Itemlist');
 var Hazmat = mongoose.model('Hazmat');
 var moment = require('moment');
