@@ -1,5 +1,6 @@
 var mongoose = require('mongoose').set('debug', true);
 var Ticket = mongoose.model('Ticket');
+var User = mongoose.modal('User');
 var Itemlist = mongoose.model('Itemlist');
 var Hazmat = mongoose.model('Hazmat');
 var moment = require('moment');
@@ -195,4 +196,31 @@ module.exports.uploadHazMat = function(req,res){
 			sendJsonResponse(res, 200, req.file);
 		}
 	})
+}
+module.exports.acceptTicket = function(req,res){
+    var userid = req.params.userid;
+    var ticketid = req.params.ticketid;
+    User.find({_id:userid},function(err,doc){
+        if(err){
+            sendJsonResponse(res,400,err);
+        }else{
+            var worker = doc;
+            Ticket.find({_id:ticketid},function(err,doc){
+                if(err){
+                    sendJsonResponse(res,400,err);
+                }else{
+                    var currentTicket = doc;
+                    currentTicket.worker = worker;
+                    currentTicket.save(function(err,doc){
+                        if(err){
+                            sendJsonResponse(res,400,err);
+                        }else{
+                            sendJsonResponse(res,200,doc);
+                        }
+                    }) 
+                }
+            })
+        }
+    })
+
 }
