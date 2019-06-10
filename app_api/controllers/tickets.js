@@ -234,5 +234,24 @@ module.exports.acceptTicket = function(req,res){
             })
         }
     })
-
+}
+module.exports.TruckAndDriver = function(req,res){
+    var ticketid = req.params.ticketid;
+    Ticket.findById(ticketid).exec(function(err,nticket){
+        if(err){
+            console.log(err);
+            sendJsonResponse(res,400,err);
+        }else{
+            nticket.driver = req.body.driver;
+            nticket.truck_number = req.body.truckNumber;
+            nticket.save(function(err,rticket){
+                if(err){
+                    console.log(err);
+                    sendJsonResponse(res,400,err);
+                }else{
+                    sendJsonResponse(res,200,rticket);
+                }
+            })
+        }
+    })
 }
