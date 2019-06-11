@@ -242,6 +242,7 @@ module.exports.TruckAndDriver = function(req,res){
             console.log(err);
             sendJsonResponse(res,400,err);
         }else{
+            console.log(nticket);
             nticket.driver = req.body.driver;
             nticket.truck_number = req.body.truckNumber;
             nticket.save(function(err,rticket){
