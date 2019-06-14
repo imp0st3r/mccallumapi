@@ -71,7 +71,8 @@ router.post('/uploadhazmat',ctrlTickets.uploadHazMat);
 router.get('/getopentickets', ctrlTickets.getOpenTickets);
 router.get('/getinprogresstickets/:userid', ctrlTickets.getInProgressTickets);
 router.get('/acceptticket/:ticketid/:userid',ctrlTickets.acceptTicket);
-router.post('/truckanddriver/:ticketid',ctrlTickets.TruckAndDriver);
+router.post('/truckanddriver/:ticketid',ctrlTickets.truckAndDriver);
+router.post('/enterreceived',ctrlTickets.enterReceived);
 // router.post('/dismissticket/:ticketid',ctrlTickets.dismissTicket);
 // router.post('/submitticket/:ticketid',ctrlTickets.submitTicket);
 

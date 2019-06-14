@@ -235,7 +235,7 @@ module.exports.acceptTicket = function(req,res){
         }
     })
 }
-module.exports.TruckAndDriver = function(req,res){
+module.exports.truckAndDriver = function(req,res){
     var ticketid = req.params.ticketid;
     Ticket.findById(ticketid).exec(function(err,nticket){
         if(err){
@@ -255,4 +255,9 @@ module.exports.TruckAndDriver = function(req,res){
             })
         }
     })
+}
+
+module.exports.enterReceived = function(req,res){
+    var ticket = req.body;
+    console.log(ticket);
 }
