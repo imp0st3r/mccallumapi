@@ -269,3 +269,16 @@ module.exports.enterReceived = function(req,res){
         }
     });
 }
+
+module.exports.enterUsed = function(req,res){
+    var ticket = req.body;
+    console.log(ticket);
+    Ticket.findOneAndUpdate({_id:ticket._id},ticket,{new:true},function(err,doc){
+        if(err){
+            console.log(err);
+            sendJsonResponse(res,400,err);
+        }else{
+            sendJsonResponse(res,200,doc);
+        }
+    });
+}
