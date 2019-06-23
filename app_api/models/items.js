@@ -13,7 +13,7 @@ var itemSchema = new mongoose.Schema({
 	hazmat: Boolean,
 	international_id: String,
 	category: String,
-	class: String,
+	hazmat_class: String,
 	explosive: Boolean
 });
 

@@ -101,7 +101,10 @@ module.exports.updateItem = function(req, res) {
                 item.category = req.body.category;
             }
             if(req.body.class){
-                item.class = req.body.class;
+                item.hazmat_class = req.body.class;
+            }
+            if(req.body.hazmat_class){
+                item.hazmat_class = req.body.hazmat_class;
             }
             if(req.body.explosive || !req.body.explosive){
                 item.explosive = req.body.explosive;
