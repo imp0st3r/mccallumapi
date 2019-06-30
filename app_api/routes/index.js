@@ -74,6 +74,7 @@ router.get('/acceptticket/:ticketid/:userid',ctrlTickets.acceptTicket);
 router.post('/truckanddriver/:ticketid',ctrlTickets.truckAndDriver);
 router.post('/enterreceived',ctrlTickets.enterReceived);
 router.post('/enterused',ctrlTickets.enterUsed);
+router.post('/submitticket',ctrlTickets.submitTicket);
 // router.post('/dismissticket/:ticketid',ctrlTickets.dismissTicket);
 // router.post('/submitticket/:ticketid',ctrlTickets.submitTicket);
 
