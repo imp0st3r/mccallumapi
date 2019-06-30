@@ -285,8 +285,9 @@ module.exports.enterUsed = function(req,res){
 
 module.exports.submitTicket = function(req,res){
     var ticket = req.body;
-    ticket.status = "in-progress";
+    ticket.status = "completed";
     console.log(ticket);
+
     Ticket.findOneAndUpdate({_id:ticket._id},ticket,{new:true},function(err,doc){
         if(err){
             console.log(err);
