@@ -297,3 +297,17 @@ module.exports.submitTicket = function(req,res){
         }
     })
 }
+
+module.exports.dismissTicket = function(res,res){
+    var ticket = req.body;
+    ticket.status = "open";
+    ticket.worker = null;
+    Ticket.findOneAndUpdate({_id:ticket._id},ticket,{new:true},function(err,doc){
+        if(err){
+            console.log(err);
+            sendJsonResponse(res,400,err);
+        }else{
+            sendJsonResponse(res,200,doc);
+        }
+    })
+}
