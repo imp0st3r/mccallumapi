@@ -235,7 +235,7 @@ module.exports.dismissTicket = function(req,res){
             sendJsonResponse(res,400,err);
         }else{
             nticket.worker = null;
-            nticket.status = "in-progress";
+            nticket.status = "open";
             nticket.save(function(err,rticket){
                 if(err){
                     console.log(err);
