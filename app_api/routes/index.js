@@ -75,7 +75,7 @@ router.post('/truckanddriver/:ticketid',ctrlTickets.truckAndDriver);
 router.post('/enterreceived',ctrlTickets.enterReceived);
 router.post('/enterused',ctrlTickets.enterUsed);
 router.post('/submitticket',ctrlTickets.submitTicket);
-router.post('/dismissticket',ctrlTickets.dismissTicket);
+router.get('/dismissticket/:ticketid',ctrlTickets.dismissTicket);
 
 
 
