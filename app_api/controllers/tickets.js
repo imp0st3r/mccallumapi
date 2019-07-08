@@ -228,6 +228,8 @@ module.exports.submitTicket = function(req,res){
 }
 
 module.exports.dismissTicket = function(res,res){
+    console.log("test");
+    console.log(req.body);
     var ticket = req.body;
     console.log(ticket);
     // ticket.status = "open";
