@@ -229,6 +229,7 @@ module.exports.submitTicket = function(req,res){
 
 module.exports.dismissTicket = function(res,res){
     var ticket = req.body;
+    console.log(ticket);
     ticket.status = "open";
     ticket.worker = {
         worker_id: "",
