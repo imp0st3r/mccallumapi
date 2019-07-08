@@ -230,20 +230,20 @@ module.exports.submitTicket = function(req,res){
 module.exports.dismissTicket = function(res,res){
     var ticket = req.body;
     console.log(ticket);
-    ticket.status = "open";
-    ticket.worker = {
-        worker_id: "",
-        name : "",
-        status : "",
-        email: "",
-        role : ""
-    };
-    Ticket.findOneAndUpdate({_id:ticket._id},ticket,{new:true},function(err,doc){
-        if(err){
-            console.log(err);
-            sendJsonResponse(res,400,err);
-        }else{
-            sendJsonResponse(res,200,doc);
-        }
-    })
+    // ticket.status = "open";
+    // ticket.worker = {
+    //     worker_id: "",
+    //     name : "",
+    //     status : "",
+    //     email: "",
+    //     role : ""
+    // };
+    // Ticket.findOneAndUpdate({_id:ticket._id},ticket,{new:true},function(err,doc){
+    //     if(err){
+    //         console.log(err);
+    //         sendJsonResponse(res,400,err);
+    //     }else{
+    //         sendJsonResponse(res,200,doc);
+    //     }
+    // })
 }
