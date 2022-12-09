@@ -12,7 +12,7 @@
     "crypto": "^1.0.1",
     "debug": "~2.6.3",
     "dotenv": "^5.0.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-jwt": "^5.3.1",
     "fs": "0.0.1-security",
     "jsonexport": "^2.4.1",
