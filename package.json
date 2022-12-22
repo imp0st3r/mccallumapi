@@ -16,7 +16,7 @@
     "express-jwt": "^5.3.1",
     "fs": "0.0.1-security",
     "jsonexport": "^2.4.1",
-    "jsonwebtoken": "^8.1.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.21.0",
     "mongoose": "^5.4.19",
     "morgan": "^1.9.1",
